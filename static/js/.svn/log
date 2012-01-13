@@ -1,0 +1,14 @@
+<modify-entry
+   committed-rev="284"
+   committed-date="2011-04-03T17:03:29.471179Z"
+   name=""
+   last-author="dave.bridges"/>
+<delete-changelist
+   name=""/>
+<committed
+   name=""
+   revision="284"/>
+<modify-wcprop
+   name=""
+   propname="svn:wc:ra_dav:version-url"
+   propval="/svn/!svn/ver/284/trunk/js"/>
