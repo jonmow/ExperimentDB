@@ -14,7 +14,21 @@ from experimentdb.hypotheses.models import Hypothesis, Effect, Manipulation, Pro
 from django.contrib import admin
 
 class HypothesisAdmin(admin.ModelAdmin):
-	pass
+    """This class configures the hypothesis administrative interface."""
+    fieldsets = (
+        ('Cause', {
+            'fields': ('cause_process', 'cause_entity', 'manipulation')
+        }),
+        ('Direction', {
+            'fields': ('effect',)
+        }),        
+        ('Effect', {
+            'fields': ('process', 'entity')
+        }),
+        ('Details', {
+            'fields': ('context', 'evidence', 'identical_hypotheses')
+        }),   
+    )
 admin.site.register(Hypothesis, HypothesisAdmin)
 
 class ManipulationAdmin(admin.ModelAdmin):
