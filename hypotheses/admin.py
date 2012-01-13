@@ -17,13 +17,15 @@ class HypothesisAdmin(admin.ModelAdmin):
     """This class configures the hypothesis administrative interface."""
     fieldsets = (
         ('Cause', {
-            'fields': ('cause_process', 'cause_entity', 'manipulation')
+            'fields': ('cause_process', 'cause_entity', 'manipulation'),
+            'description' : "Choose The Process or Entity Under Investigation.",
         }),
         ('Direction', {
             'fields': ('effect',)
         }),        
         ('Effect', {
-            'fields': ('process', 'entity')
+            'fields': ('process', 'entity'),
+            'description' : "Choose The Process or Entity Which is Responding.",
         }),
         ('Details', {
             'fields': ('context', 'evidence', 'identical_hypotheses')
