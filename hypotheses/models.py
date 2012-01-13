@@ -101,14 +101,22 @@ class Hypothesis(models.Model):
 	
     def __unicode__(self):
         """The unicode string for this model will show entity of entity is present and process if process is present.  The over-riding of clean should ensure that only one of the two is present."""
-        if self.process and self.context:
+        if self.process and self.context and self.manipulation:
             return u'%s %s %s in %s' % (self.manipulation, self.effect, self.process, self.context)
-        elif self.process:
+        elif self.process and self.manipulation:
             return u'%s %s %s' % (self.manipulation, self.effect, self.process)
-        elif self.entity and self.context:
+        elif self.entity and self.context and self.manipulation:
             return u'%s %s %s in %s' % (self.manipulation, self.effect, self.entity, self.context)
-        elif self.entity:
+        elif self.entity and self.manipulation:
             return u'%s %s %s' % (self.manipulation, self.effect, self.entity)
+        elif self.cause_entity and self.process and self.context:
+            return u'%s %s %s in %s' % (self.cause_entity, self.effect, self.process, self.context)
+        elif self.cause_process and self.process and self.context:
+            return u'%s %s %s in %s' % (self.cause_process, self.effect, self.process, self.context) 
+        elif self.cause_entity and self.process:
+            return u'%s %s %s' % (self.cause_entity, self.effect, self.process)
+        elif self.cause_process and self.process:
+            return u'%s %s %s' % (self.cause_process, self.effect, self.process)             
         else:
             return "Unspecified Hypothesis"
 			
@@ -215,8 +223,8 @@ class Entity(models.Model):
     A unique name is a required field, and either a protein or a chemical must be chosen."""
 	
     name = models.CharField(max_length=100, unique=True, help_text="The specific name for the entity, such as pSer 473 or Akt mRNA")
-    protein = models.ManyToManyField(Protein, blank=True, null=True, help_text="Select either a protein or a chemcial.")
-    chemical = models.ManyToManyField(Chemical, 
+    protein = models.ForeignKey(Protein, blank=True, null=True, help_text="Select either a protein or a chemcial.")
+    chemical = models.ForeignKey(Chemical, 
         blank=True, 
         null=True,
         verbose_name="Small Molecule",
