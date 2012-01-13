@@ -60,12 +60,33 @@ class Hypothesis(models.Model):
 
     This app has many to many field links to Manipulation, Context and Evidence and a ForeignKey link to an Effect and either a Process or Entity.  The required fields are manipulation, effect and either a process or entity.  The unicode representation of this model is going to be "(manipulation) (effects)/(process or entity in which there could be several).  The absolute url for an instance is /experimentdb/hypothesis/# where # is the primary key.  Tests are generated to test model formation with required and all fields, as well as to test the clean and absolute_url.  
     """
-	
-    manipulation = models.ForeignKey('Manipulation')
+    cause_process = models.ForeignKey('Process', 
+        blank=True, null=True, 
+        verbose_name="Causative Process", 
+        related_name = "cause_process",
+        help_text="A biological process such as glucose uptake or endocytosis.  Select either an entity or a process but not both")	
+    cause_entity = models.ForeignKey('Entity', 
+        blank=True, null=True, 
+        verbose_name="Causative Protein or Chemical",
+        related_name = "cause_entity",
+        help_text="A particular biological entity such as a protein or phosphorylation site.  Select either an entity or a process but not both.")	
+    manipulation = models.ForeignKey('Manipulation', 
+        blank=True, null=True, 
+        help_text="Experimental Details")
     effect = models.ForeignKey('Effect')
-    process = models.ForeignKey('Process', blank=True, null=True, help_text="A biological process such as glucose uptake or endocytosis.  Select either an entity or a process but not both")	
-    entity = models.ForeignKey('Entity', blank=True, null=True, help_text="A particular biological entity such as a protein or phosphorylation site.  Select either an entity or a process but not both.")
-    context = models.ForeignKey('Context', blank=True, null=True, help_text="Describes the model system and potential restrictions.  Since only one context might be selected, the context may need to be quite specific.")	
+    process = models.ForeignKey('Process', 
+        blank=True, null=True, 
+        verbose_name = "Affected Process",
+        related_name = "affected_process",
+        help_text="A biological process such as glucose uptake or endocytosis.  Select either an entity or a process but not both")	
+    entity = models.ForeignKey('Entity', 
+        blank=True, null=True, 
+        related_name = "affected_entity",
+        verbose_name = "Affected Thing",
+        help_text="A particular biological entity such as a protein or phosphorylation site.  Select either an entity or a process but not both.")
+    context = models.ForeignKey('Context', 
+        blank=True, null=True, 
+        help_text="Describes the model system and potential restrictions.  Since only one context might be selected, the context may need to be quite specific.")	
     evidence = models.ManyToManyField('Evidence', blank=True, null=True)
     identical_hypotheses = models.ManyToManyField("self", blank=True, null=True, help_text="Some processes or entities may generally correlate.  As an example, the process activation of mTORC1 generally correlates wth activation of pThr 389 phosphorylation.  In these cases, both hypotheses are symmetrically linked.")
     create_date = models.DateField(auto_now_add = True)
